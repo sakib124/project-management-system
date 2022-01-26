@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+
+<html xmlns:th="https://www.thymeleaf.org">
+
+<head th:replace="layouts :: header"></head>
+
+<body>
+
+<nav th:replace="layouts :: navbar"></nav>
+<br>
+
+	<div class="container">
+		<form th:action="@{/projects/save}" th:object=${project} method="POST">
+		<input type="hidden" th:field=${project.projectId}>
+		<div class="form-group row">
+		<input type="text" th:field=${project.name} placeholder="Project Name" required>
+		</div>
+		<div class="form-group row">
+		<select th:field=${project.stage}>
+			<option th:value="NOTSTARTED"> Not Started</option>
+			<option th:value="INPROGRESS"> In Progress</option>
+			<option th:value="COMPLETED"> Completed</option>
+		</select>
+		</div>
+		<div class="form-group row">
+		<textarea type="text" th:field=${project.description} placeholder="Enter Project Description" required></textarea>
+		</div>
+		<div class="form-group row">
+		<select th:field=${project.employees} multiple="multiple">
+		<option th:each="employee : ${allEmployees}"
+		th:value=${employee.employeeId}
+		th:text=${employee.firstName}
+		>
+		</option>
+		</select>
+		</div>
+		<div class="form-group row">
+			<input id="dp3" type="text" value="Start Date" th:field="${project.startDate}" placeholder="Start Date" required>
+		</div>
+		<div class="form-group row">
+			<input id="dp4" type="text" value="End Date" th:field="${project.endDate}" placeholder="End Date" required>
+		</div>
+		
+		<script type="text/javascript">
+	      	$('#dp3').datepicker();
+	      	$('#dp4').datepicker();
+	      	  $("form").submit(function(){
+	      		 	let startDate = new Date($("#dp3").val());
+		      	    let endDate = new Date($("#dp4").val());
+
+		      	    if(startDate > endDate) {
+		      	        alert("End date needs to be greater than start date");
+		      	        return false;
+		      	    }
+	      	  });
+	      	
+	      </script>
+		<div class="form-group row">
+		<button type="submit">Create Project</button>
+		</div>
+		</form>
+	</div>
+	
+</body>
+
+</html>
